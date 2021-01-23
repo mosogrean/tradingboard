@@ -14,7 +14,7 @@ const R: RouteList = {
     name: 'Investor',
   },
   cryptoSymbol: {
-    link: `${mainLink}/crypto/symbol/:Symbol`,
+    link: '/crypto/symbol/:Symbol',
     name: 'Crypto',
   },
   tradingViewer: {
