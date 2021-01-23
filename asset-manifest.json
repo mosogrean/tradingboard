@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/tradingboard/static/css/main.35aa1781.chunk.css",
-    "main.js": "/tradingboard/static/js/main.7674cc03.chunk.js",
-    "main.js.map": "/tradingboard/static/js/main.7674cc03.chunk.js.map",
+    "main.js": "/tradingboard/static/js/main.6d74c2d7.chunk.js",
+    "main.js.map": "/tradingboard/static/js/main.6d74c2d7.chunk.js.map",
     "runtime-main.js": "/tradingboard/static/js/runtime-main.a22fb6f6.js",
     "runtime-main.js.map": "/tradingboard/static/js/runtime-main.a22fb6f6.js.map",
     "static/js/2.7dfbcaa5.chunk.js": "/tradingboard/static/js/2.7dfbcaa5.chunk.js",
     "static/js/2.7dfbcaa5.chunk.js.map": "/tradingboard/static/js/2.7dfbcaa5.chunk.js.map",
     "index.html": "/tradingboard/index.html",
-    "precache-manifest.ebc092b4d358645abe80a6a45894e49a.js": "/tradingboard/precache-manifest.ebc092b4d358645abe80a6a45894e49a.js",
+    "precache-manifest.08e8f55401245cd3e0bc1bcc0a057ab8.js": "/tradingboard/precache-manifest.08e8f55401245cd3e0bc1bcc0a057ab8.js",
     "service-worker.js": "/tradingboard/service-worker.js",
     "static/css/main.35aa1781.chunk.css.map": "/tradingboard/static/css/main.35aa1781.chunk.css.map",
     "static/js/2.7dfbcaa5.chunk.js.LICENSE.txt": "/tradingboard/static/js/2.7dfbcaa5.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.a22fb6f6.js",
     "static/js/2.7dfbcaa5.chunk.js",
     "static/css/main.35aa1781.chunk.css",
-    "static/js/main.7674cc03.chunk.js"
+    "static/js/main.6d74c2d7.chunk.js"
   ]
 }
