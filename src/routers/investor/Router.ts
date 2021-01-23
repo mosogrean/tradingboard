@@ -6,7 +6,7 @@ export interface RouteList {
   tradingViewer: RouteItem;
 }
 
-const mainLink = '/tradingboard/';
+const mainLink = '/tradingboard';
 
 const R: RouteList = {
   index: {
