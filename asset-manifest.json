@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/tradingboard/static/css/main.35aa1781.chunk.css",
+    "main.js": "/tradingboard/static/js/main.97154029.chunk.js",
+    "main.js.map": "/tradingboard/static/js/main.97154029.chunk.js.map",
+    "runtime-main.js": "/tradingboard/static/js/runtime-main.a22fb6f6.js",
+    "runtime-main.js.map": "/tradingboard/static/js/runtime-main.a22fb6f6.js.map",
+    "static/js/2.35d7dd32.chunk.js": "/tradingboard/static/js/2.35d7dd32.chunk.js",
+    "static/js/2.35d7dd32.chunk.js.map": "/tradingboard/static/js/2.35d7dd32.chunk.js.map",
+    "index.html": "/tradingboard/index.html",
+    "precache-manifest.3890acca039dc09c04a96c2ceeac5e5e.js": "/tradingboard/precache-manifest.3890acca039dc09c04a96c2ceeac5e5e.js",
+    "service-worker.js": "/tradingboard/service-worker.js",
+    "static/css/main.35aa1781.chunk.css.map": "/tradingboard/static/css/main.35aa1781.chunk.css.map",
+    "static/js/2.35d7dd32.chunk.js.LICENSE.txt": "/tradingboard/static/js/2.35d7dd32.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a22fb6f6.js",
+    "static/js/2.35d7dd32.chunk.js",
+    "static/css/main.35aa1781.chunk.css",
+    "static/js/main.97154029.chunk.js"
+  ]
+}
