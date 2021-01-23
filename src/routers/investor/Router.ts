@@ -6,11 +6,11 @@ export interface RouteList {
   tradingViewer: RouteItem;
 }
 
-const mainLink = '';
+const mainLink = '#';
 
 const R: RouteList = {
   index: {
-    link: `${mainLink}/`,
+    link: '/',
     name: 'Investor',
   },
   cryptoSymbol: {
@@ -18,7 +18,7 @@ const R: RouteList = {
     name: 'Crypto',
   },
   tradingViewer: {
-    link: `${mainLink}/crypto/tradingviewer`,
+    link: '/crypto/tradingviewer',
     name: 'TradingViewer',
   },
 };

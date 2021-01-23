@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import './App.less';
 import {
-  HashRouter as Router, Switch,
+  BrowserRouter, HashRouter, Redirect, Router, Switch,
 } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import GuestRouter from './routers/guest/GuestRouter';
@@ -11,10 +11,10 @@ const history = createBrowserHistory();
 
 function App(): ReactElement {
   return (
-    <Router basename="tradingboard">
+    <HashRouter>
       {GuestRouter}
       {InvestorRouter}
-    </Router>
+    </HashRouter>
   );
 }
 
