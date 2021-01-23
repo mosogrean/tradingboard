@@ -4,7 +4,7 @@ export interface RouteList {
   login: RouteItem;
 }
 
-const mainLink = '/tradingboards/login';
+const mainLink = '/tradingboard/login';
 
 const R: RouteList = {
   login: {
