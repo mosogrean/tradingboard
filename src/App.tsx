@@ -14,7 +14,7 @@ function App(): ReactElement {
         <Switch>
           {GuestRouter}
           {InvestorRouter}
-          <Redirect to="/page/404" exact />
+          {/* <Redirect to="/page/404" exact /> */}
         </Switch>
       </BrowserRouter>
     </Router>
