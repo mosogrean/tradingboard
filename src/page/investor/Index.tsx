@@ -1,5 +1,15 @@
 import {
-  Tag, Space, Row, Card, Table, Button,
+  Tag,
+  Space,
+  Row,
+  Card,
+  Table,
+  Button,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Descriptions,
 } from 'antd';
 import React, { useState } from 'react';
 import R from '../../routers/investor/Router';
@@ -37,25 +47,95 @@ export const CryptoSymbolData = [
 
 const Index: React.FC = (): JSX.Element => {
   const [resetTable, setResetTable] = useState(false);
+  const [descDeposit, setDescDeposit] = useState<any>();
+  console.log(descDeposit);
   return (
     <>
-      <Row justify="space-around">
-        <Card
-          title="CRYPTOCURRENCY"
-          style={{ width: '50%' }}
-          extra={(<><Button type="link" href={R.tradingViewer.link}>view tradingviwer</Button></>)}
-        >
-          <Table
-            className="table-check"
-            columns={columns}
-            dataSource={CryptoSymbolData}
-            onRow={(record, rowIndex) => ({
-              onClick: (): void => {
-                window.location.href = R.cryptoSymbol.link.replace(':Symbol', record.crypto);
-              }, // click row
-            })}
-          />
-        </Card>
+      <Row justify="space-around" gutter={[16, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
+        <Col sm={24} md={24} lg={12}>
+          <Card
+            title="CRYPTOCURRENCY"
+            style={{ width: '100%' }}
+            extra={(<><Button type="link" href={R.tradingViewer.link}>view tradingviwer</Button></>)}
+          >
+            <Table
+              className="table-check"
+              columns={columns}
+              dataSource={CryptoSymbolData}
+              onRow={(record, rowIndex) => ({
+                onClick: (): void => {
+                  window.location.href = R.cryptoSymbol.link.replace(':Symbol', record.crypto);
+                }, // click row
+              })}
+            />
+          </Card>
+        </Col>
+        <Col sm={24} md={24} lg={12}>
+          <Card title="คำนวน">
+            <Divider>กำไร</Divider>
+            <Card>
+              <Form
+                layout="vertical"
+                onFinish={(value: {cash: number; crypto_buy: number; crypto_sale: number; fee: number}): void => {
+                  console.log(value.cash);
+                  const amount = value.cash / value.crypto_buy;
+                  const receive = (amount) * value.crypto_sale;
+                  const deposit =  (receive - (((amount * value.fee) / 100) + ((receive * value.fee) / 100))) - value.cash;
+                  setDescDeposit({
+                    amount,
+                    receive,
+                    deposit,
+                  });
+                }}
+                initialValues={{ fee: 0.25 }}
+              >
+                <Form.Item
+                  label="จำนวนเงินที่ต้องการซื้อ"
+                  rules={[{ required: true }]}
+                  name="cash"
+                >
+                  <Input type="number" />
+                </Form.Item>
+                <Form.Item
+                  label="ราคาซื้อ crypto"
+                  rules={[{ required: true }]}
+                  name="crypto_buy"
+                >
+                  <Input type="number" />
+                </Form.Item>
+                <Form.Item
+                  label="ราคาขาย crypto"
+                  rules={[{ required: true }]}
+                  name="crypto_sale"
+                >
+                  <Input type="number" />
+                </Form.Item>
+                <Form.Item
+                  label="fee"
+                  name="fee"
+                >
+                  <Input
+                    type="number"
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button style={{ float: 'right', margin: 10 }} type="primary" htmlType="submit">คำนวน</Button>
+                </Form.Item>
+              </Form>
+            </Card>
+            {
+              descDeposit ? (
+                <Card style={{ marginTop: 10 }}>
+                  <Descriptions layout="vertical">
+                    <Descriptions.Item label="เหรียญที่ได้ทั้งหมด">{descDeposit?.amount || null}</Descriptions.Item>
+                    <Descriptions.Item label="ขายแล้วจะได้">{descDeposit?.receive || null}</Descriptions.Item>
+                    <Descriptions.Item label="เป็นกำไรสุทธิ">{descDeposit?.deposit || null}</Descriptions.Item>
+                  </Descriptions>
+                </Card>
+              ) : null
+            }
+          </Card>
+        </Col>
       </Row>
     </>
   );
