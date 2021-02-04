@@ -94,29 +94,27 @@ const Index: React.FC = (): JSX.Element => {
                   rules={[{ required: true }]}
                   name="cash"
                 >
-                  <Input type="number" />
+                  <Input />
                 </Form.Item>
                 <Form.Item
                   label="ราคาซื้อ crypto"
                   rules={[{ required: true }]}
                   name="crypto_buy"
                 >
-                  <Input type="number" />
+                  <Input />
                 </Form.Item>
                 <Form.Item
                   label="ราคาขาย crypto"
                   rules={[{ required: true }]}
                   name="crypto_sale"
                 >
-                  <Input type="number" />
+                  <Input />
                 </Form.Item>
                 <Form.Item
                   label="fee"
                   name="fee"
                 >
-                  <Input
-                    type="number"
-                  />
+                  <Input />
                 </Form.Item>
                 <Form.Item>
                   <Button style={{ float: 'right', margin: 10 }} type="primary" htmlType="submit">คำนวน</Button>
