@@ -73,7 +73,6 @@ const Index: React.FC = (): JSX.Element => {
         <Col xs={24} sm={24} md={24} lg={12}>
           <Card title="คำนวน">
             <Divider>กำไร</Divider>
-            <Card>
               <Form
                 layout="vertical"
                 onFinish={(value: {cash: number; crypto_buy: number; crypto_sale: number; fee: number}): void => {
@@ -119,7 +118,6 @@ const Index: React.FC = (): JSX.Element => {
                   <Button style={{ float: 'right', margin: 10 }} type="primary" htmlType="submit">คำนวน</Button>
                 </Form.Item>
               </Form>
-            </Card>
             {
               descDeposit ? (
                 <Card style={{ marginTop: 10 }}>
