@@ -4,6 +4,7 @@ import {
 } from 'antd';
 import { Link } from 'react-router-dom';
 import R from '../routers/investor/Router';
+import './less/main-layout.less';
 
 const { Header, Content, Footer } = Layout;
 
@@ -21,7 +22,7 @@ const MainLayout: React.FC = (props): JSX.Element => {
         </Menu>
       </Header>
       <hr />
-      <Content style={{ padding: '0 50px' }}>
+      <Content>
         <div className="site-layout-content">
           {children}
         </div>

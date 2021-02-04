@@ -52,7 +52,7 @@ const Index: React.FC = (): JSX.Element => {
   return (
     <>
       <Row justify="space-around" gutter={[16, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
-        <Col sm={24} md={24} lg={12}>
+        <Col xs={24} sm={24} md={24} lg={12}>
           <Card
             title="CRYPTOCURRENCY"
             style={{ width: '100%' }}
@@ -70,14 +70,13 @@ const Index: React.FC = (): JSX.Element => {
             />
           </Card>
         </Col>
-        <Col sm={24} md={24} lg={12}>
+        <Col xs={24} sm={24} md={24} lg={12}>
           <Card title="คำนวน">
             <Divider>กำไร</Divider>
             <Card>
               <Form
                 layout="vertical"
                 onFinish={(value: {cash: number; crypto_buy: number; crypto_sale: number; fee: number}): void => {
-                  console.log(value.cash);
                   const amount = value.cash / value.crypto_buy;
                   const receive = (amount) * value.crypto_sale;
                   const deposit =  (receive - (((amount * value.fee) / 100) + ((receive * value.fee) / 100))) - value.cash;
