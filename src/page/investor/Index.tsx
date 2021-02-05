@@ -11,7 +11,7 @@ import {
   Input,
   Descriptions,
 } from 'antd';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import R from '../../routers/investor/Router';
 import './less/index.less';
 
@@ -47,11 +47,31 @@ export const CryptoSymbolData = [
 
 const Index: React.FC = (): JSX.Element => {
   const [resetTable, setResetTable] = useState(false);
+  const [formValue, setFormValue] = useState<any>(false);
   const [descDeposit, setDescDeposit] = useState<any>();
-  console.log(descDeposit);
+
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    const value: {cash: number; crypto_buy: number; crypto_sale: number; fee: number} = form.getFieldsValue();
+    const amount = value.cash / value.crypto_buy;
+    const receive = (amount) * value.crypto_sale;
+    const deposit = (receive - (((amount * value.fee) / 100) + ((receive * value.fee) / 100))) - value.cash;
+    setDescDeposit({
+      amount,
+      receive,
+      deposit,
+    });
+  }, [formValue]);
+
   return (
     <>
-      <Row justify="space-around" gutter={[16, { xs: 8, sm: 16, md: 24, lg: 32 }]}>
+      <Row
+        justify="space-around"
+        gutter={[16, {
+          xs: 8, sm: 16, md: 24, lg: 32,
+        }]}
+      >
         <Col xs={24} sm={24} md={24} lg={12}>
           <Card
             title="CRYPTOCURRENCY"
@@ -73,53 +93,51 @@ const Index: React.FC = (): JSX.Element => {
         <Col xs={24} sm={24} md={24} lg={12}>
           <Card title="คำนวน">
             <Divider>กำไร</Divider>
-              <Form
-                layout="vertical"
-                onFinish={(value: {cash: number; crypto_buy: number; crypto_sale: number; fee: number}): void => {
-                  const amount = value.cash / value.crypto_buy;
-                  const receive = (amount) * value.crypto_sale;
-                  const deposit =  (receive - (((amount * value.fee) / 100) + ((receive * value.fee) / 100))) - value.cash;
-                  setDescDeposit({
-                    amount,
-                    receive,
-                    deposit,
-                  });
-                }}
-                initialValues={{ fee: 0.25 }}
+            <Form
+              layout="vertical"
+              form={form}
+              onFinish={(value: {cash: number; crypto_buy: number; crypto_sale: number; fee: number}): void => {
+                const amount = value.cash / value.crypto_buy;
+                const receive = (amount) * value.crypto_sale;
+                const deposit = (receive - (((amount * value.fee) / 100) + ((receive * value.fee) / 100))) - value.cash;
+                setDescDeposit({
+                  amount,
+                  receive,
+                  deposit,
+                });
+              }}
+              initialValues={{ fee: 0.25 }}
+            >
+              <Form.Item
+                label="จำนวนเงินที่ต้องการซื้อ"
+                rules={[{ required: true }]}
+                name="cash"
               >
-                <Form.Item
-                  label="จำนวนเงินที่ต้องการซื้อ"
-                  rules={[{ required: true }]}
-                  name="cash"
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  label="ราคาซื้อ crypto"
-                  rules={[{ required: true }]}
-                  name="crypto_buy"
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  label="ราคาขาย crypto"
-                  rules={[{ required: true }]}
-                  name="crypto_sale"
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  label="fee"
-                  name="fee"
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item>
-                  <Button style={{ float: 'right', margin: 10 }} type="primary" htmlType="submit">คำนวน</Button>
-                </Form.Item>
-              </Form>
+                <Input type="number" step="any" onChange={() => { setFormValue(!formValue); }} />
+              </Form.Item>
+              <Form.Item
+                label="ราคาซื้อ crypto"
+                rules={[{ required: true }]}
+                name="crypto_buy"
+              >
+                <Input type="number" step="any" onChange={() => { setFormValue(!formValue); }} />
+              </Form.Item>
+              <Form.Item
+                label="ราคาขาย crypto"
+                rules={[{ required: true }]}
+                name="crypto_sale"
+              >
+                <Input type="number" step="any" onChange={() => { setFormValue(!formValue); }} />
+              </Form.Item>
+              <Form.Item
+                label="fee"
+                name="fee"
+              >
+                <Input type="number" step="any" onChange={() => { setFormValue(!formValue); }} />
+              </Form.Item>
+            </Form>
             {
-              descDeposit ? (
+              descDeposit?.amount ? (
                 <Card style={{ marginTop: 10 }}>
                   <Descriptions layout="vertical">
                     <Descriptions.Item label="เหรียญที่ได้ทั้งหมด">{descDeposit?.amount || null}</Descriptions.Item>
