@@ -37,7 +37,7 @@ const CryptoTradingViewer: React.FC = (): JSX.Element => {
           "width": "100%",
           "height": 610,
           "symbol": "BITKUB:${crypto.symbol}",
-          "interval": "60", //240
+          "interval": "5", //240
           "timezone": "Asia/Bangkok",
           "theme": "light",
           "style": "1",
@@ -49,7 +49,9 @@ const CryptoTradingViewer: React.FC = (): JSX.Element => {
           "details": true,
           "studies": [
             "MACD@tv-basicstudies",
-            "RSI@tv-basicstudies"
+            "RSI@tv-basicstudies",
+            "BB@tv-basicstudies",
+            "BollingerBandsWidth@tv-basicstudies"
           ],
           "container_id": "tradingview_5a28d${index}"
         }

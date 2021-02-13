@@ -12,6 +12,7 @@ import {
   Descriptions,
 } from 'antd';
 import React, { useState, useEffect } from 'react';
+import { Redirect } from 'react-router';
 import R from '../../routers/investor/Router';
 import './less/index.less';
 
@@ -49,6 +50,7 @@ const Index: React.FC = (): JSX.Element => {
   const [resetTable, setResetTable] = useState(false);
   const [formValue, setFormValue] = useState<any>(false);
   const [descDeposit, setDescDeposit] = useState<any>();
+  const [goToPath, setGoToPath] = useState<JSX.Element>();
 
   const [form] = Form.useForm();
 
@@ -66,6 +68,7 @@ const Index: React.FC = (): JSX.Element => {
 
   return (
     <>
+      {goToPath || null}
       <Row
         justify="space-around"
         gutter={[16, {
@@ -76,7 +79,18 @@ const Index: React.FC = (): JSX.Element => {
           <Card
             title="CRYPTOCURRENCY"
             style={{ width: '100%' }}
-            extra={(<><Button type="link" href={R.tradingViewer.link}>view tradingviwer</Button></>)}
+            extra={(
+              <>
+                <Button
+                  type="link"
+                  onClick={() => {
+                    setGoToPath(<Redirect to={R.tradingViewer.link} />);
+                  }}
+                >
+                  view tradingviwer
+                </Button>
+              </>
+          )}
           >
             <Table
               className="table-check"
@@ -84,7 +98,7 @@ const Index: React.FC = (): JSX.Element => {
               dataSource={CryptoSymbolData}
               onRow={(record, rowIndex) => ({
                 onClick: (): void => {
-                  window.location.href = R.cryptoSymbol.link.replace(':Symbol', record.crypto);
+                  setGoToPath(<Redirect to={R.cryptoSymbol.link.replace(':Symbol', record.crypto)} />);
                 }, // click row
               })}
             />

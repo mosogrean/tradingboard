@@ -24,7 +24,7 @@ const CryptoSymbol: React.FC = (props): JSX.Element => {
       "width": "100%",
       "height": "660",
       "symbol": "BITKUB:${Symbol.split('_').join('')}",
-      "interval": "60", //240
+      "interval": "5", //240
       "timezone": "Asia/Bangkok",
       "theme": "light",
       "style": "1",

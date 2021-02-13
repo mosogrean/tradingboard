@@ -105,7 +105,6 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
         break;
     }
   };
-  console.log(inputPrice);
   return (
     <div>
       <Modal
