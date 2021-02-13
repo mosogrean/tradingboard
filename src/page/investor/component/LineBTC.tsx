@@ -1,5 +1,5 @@
 import {
-  Button, InputNumber, Select, Space, Typography,
+  Button, InputNumber, Select, Space, Typography, Col, Row,
 } from 'antd';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -31,12 +31,12 @@ const LineBTC: React.FC<LineBTCProps> = ({ symbol }): JSX.Element => {
   const [stateLabels, setStateLabels] = useState([]);
   const [stateData, setStateData] = useState([]);
 
-  const [resolution, setResolution] = useState<ResolutionType>('15');
-  const [periodOfTime, setPeriodOfTime] = useState(1);
+  const [resolution, setResolution] = useState<ResolutionType>('5');
+  const [periodOfTime, setPeriodOfTime] = useState(10);
 
   const setData = (): void => {
     const unixTime = moment().unix();
-    TradingAPI(symbol as SymbolType, resolution, unixTime - periodOfTime * 43200, unixTime).then((result: any) => {
+    TradingAPI(symbol as SymbolType, resolution, unixTime - periodOfTime * 1800, unixTime).then((result: any) => {
       setStateLabels(result.t.map((unix: any) => timeConverter(unix)).concat([null, null, null, null]));
       setStateData(result.c);
     });
@@ -63,55 +63,63 @@ const LineBTC: React.FC<LineBTCProps> = ({ symbol }): JSX.Element => {
 
   return (
     <div>
-      <Space style={{ marginBottom: '2%' }}>
-        <Text>ระยะต่อ 1 ช่อง:</Text>
-        <Select
-          defaultValue="15"
-          style={{ width: 120 }}
-          onChange={(value: any) => {
-            setResolution(value);
+      <Row gutter={[16, 24]}>
+        <Col sm={24} xs={24} md={12} lg={12}>
+          <Text>ระยะต่อ 1 ช่อง:</Text>
+          <Select
+            defaultValue="5"
+            style={{ width: 120 }}
+            onChange={(value: any) => {
+              setResolution(value);
+            }}
+          >
+            <OptGroup label="นาที">
+              <Option value="1">1 นาที</Option>
+              <Option value="5">5 นาที</Option>
+              <Option value="15">15 นาที</Option>
+              <Option value="30">30 นาที</Option>
+            </OptGroup>
+            <OptGroup label="ชั่วโมง">
+              <Option value="60">1 ชั่วโมง</Option>
+              <Option value="240">4 ชั่วโมง</Option>
+            </OptGroup>
+            <OptGroup label="วัน">
+              <Option value="1D">1 วัน</Option>
+            </OptGroup>
+          </Select>
+        </Col>
+        <Col sm={24} xs={24} md={12} lg={12}>
+          <Text>ช่วงเวลาทั้งหมด: </Text>
+          <InputNumber min={1} max={300} defaultValue={10} onChange={(value: any) => { setPeriodOfTime(value); }} />
+          <Text> ชั่วโมง</Text>
+        </Col>
+        <Col>
+          <Button
+            type="primary"
+            onClick={(): void => {
+              setData();
+            }}
+          >
+            ปรับค่า
+          </Button>
+        </Col>
+      </Row>
+      <Row>
+        <Line
+          data={state}
+          options={{
+            title: {
+              display: true,
+              text: 'Average Price value per Time',
+              fontSize: 20,
+            },
+            legend: {
+              display: true,
+              position: 'right',
+            },
           }}
-        >
-          <OptGroup label="นาที">
-            <Option value="1">1 นาที</Option>
-            <Option value="5">5 นาที</Option>
-            <Option value="15">15 นาที</Option>
-            <Option value="30">30 นาที</Option>
-          </OptGroup>
-          <OptGroup label="ชั่วโมง">
-            <Option value="60">1 ชั่วโมง</Option>
-            <Option value="240">4 ชั่วโมง</Option>
-          </OptGroup>
-          <OptGroup label="วัน">
-            <Option value="1D">1 วัน</Option>
-          </OptGroup>
-        </Select>
-        <Text>ช่วงเวลาทั้งหมด: </Text>
-        <InputNumber min={1} max={30} defaultValue={1} onChange={(value: any) => { setPeriodOfTime(value); }} />
-        <Text>วัน</Text>
-        <Button
-          type="primary"
-          onClick={(): void => {
-            setData();
-          }}
-        >
-          ปรับค่า
-        </Button>
-      </Space>
-      <Line
-        data={state}
-        options={{
-          title: {
-            display: true,
-            text: 'Average Price value per Time',
-            fontSize: 20,
-          },
-          legend: {
-            display: true,
-            position: 'right',
-          },
-        }}
-      />
+        />
+      </Row>
     </div>
   );
 };

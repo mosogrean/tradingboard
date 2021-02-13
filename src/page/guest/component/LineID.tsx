@@ -8,9 +8,11 @@ interface LineIDProps {
   toggle: () => any;
 }
 
-const LineID: React.FC<LineIDProps> = ({ show, form, toggle }): JSX.Element => {
+const LineID: React.FC<LineIDProps> = ({
+  show, form, toggle,
+}): JSX.Element => {
   const onFinish = async (): Promise<void> => {
-    const a = await form.validateFields();
+    await form.validateFields();
     toggle();
   };
 
@@ -24,9 +26,9 @@ const LineID: React.FC<LineIDProps> = ({ show, form, toggle }): JSX.Element => {
         onFinish={onFinish}
       >
         <Form.Item
-          label="Line Account ID"
-          name="lineId"
-          rules={[{ required: show, message: 'Please input your line account id!' }]}
+          label="Username"
+          name="username"
+          rules={[{ required: show, message: 'Please input your user account!' }]}
         >
           <Input />
         </Form.Item>

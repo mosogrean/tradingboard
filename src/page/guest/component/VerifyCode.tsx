@@ -6,15 +6,16 @@ interface VerifyCodeProps {
   show: boolean;
   form: FormInstance;
   toggle: () => any;
+  toggleBack: () => any;
 }
 
-const VerifyCode: React.FC<VerifyCodeProps> = ({ show, form, toggle }): JSX.Element => {
+const VerifyCode: React.FC<VerifyCodeProps> = ({ show, form, toggle, toggleBack }): JSX.Element => {
   const goBack = () => {
-    toggle();
+    toggleBack();
   };
 
   const verifyHandle = () => {
-    console.log(1);
+    toggle();
   };
 
   return (
@@ -31,7 +32,7 @@ const VerifyCode: React.FC<VerifyCodeProps> = ({ show, form, toggle }): JSX.Elem
           <Input />
         </Form.Item>
         <div>
-          <Button type="ghost" onClick={goBack} style={{float: 'left'}}>
+          <Button type="ghost" onClick={goBack} style={{ float: 'left' }}>
             Back
           </Button>
           <Button type="primary" onClick={verifyHandle}>

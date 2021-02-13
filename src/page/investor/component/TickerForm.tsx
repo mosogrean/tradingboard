@@ -67,13 +67,13 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
     }
   }, [point1.date]);
 
-//   `{
-//   symbol: 'XLM',
-//   price: 9.33,
-//   threshold: 0.02,
-//   alert: 'ไปถอน',
-//   now: moment().unix(),
-// }`
+  //   `{
+  //   symbol: 'XLM',
+  //   price: 9.33,
+  //   threshold: 0.02,
+  //   alert: 'ไปถอน',
+  //   now: moment().unix(),
+  // }`
   const handleOk = () => {
     // send api
   };
@@ -85,13 +85,6 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
           <>
             <Descriptions title="ราคาที่ต้องการซื้อ" bordered>
               <Descriptions.Item label="ราคาบันทึก" span={3}>{inputPrice.price}</Descriptions.Item>
-              <Descriptions.Item label="ราคาแจ้งเตือนระหว่าง" span={3}>
-                <Space>
-                  {Number(inputPrice.price) + Number(inputPrice.threshold)}
-                  ,
-                  {inputPrice.price - inputPrice.threshold}
-                </Space>
-              </Descriptions.Item>
               <Descriptions.Item label="แจ้งเตือนทั้งหมด" span={3}>
                 {inputMain.notification_times}
               </Descriptions.Item>
@@ -120,7 +113,7 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
       </Modal>
       <Divider orientation="left">กำหนดรูปแบบ</Divider>
       <Row>
-        <Col span={24}>
+        <Col sm={24} xs={24} md={24} lg={24}>
           <Radio.Group defaultValue="purchase_price" buttonStyle="solid">
             <Radio.Button value="purchase_price" onClick={(e): any => { RadioOnClineHandle(e, 'price'); }}>
               ราคาที่ต้องการ
@@ -130,11 +123,11 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
               ราคาที่ต้องการ
               <strong>ขาย</strong>
             </Radio.Button>
-            <Radio.Button value="support_line" onClick={(e): any => { RadioOnClineHandle(e, 'point'); }}>
+            <Radio.Button disabled value="support_line" onClick={(e): any => { RadioOnClineHandle(e, 'point'); }}>
               เส้น
               <strong>แนวรับ</strong>
             </Radio.Button>
-            <Radio.Button value="resistance_line" onClick={(e): any => { RadioOnClineHandle(e, 'point'); }}>
+            <Radio.Button disabled value="resistance_line" onClick={(e): any => { RadioOnClineHandle(e, 'point'); }}>
               เส้น
               <strong>แนวต้าน</strong>
             </Radio.Button>
@@ -146,23 +139,11 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
         <Col span={24}>
           <span>ราคาที่ต้องการแจ้งเตือนต่อหน่วย</span>
           <Input
-            defaultValue="0"
             prefix={<FontAwesomeIcon icon={faMoneyBillAlt} />}
             addonAfter="บาท"
             allowClear
             type="number"
             onChange={(e: any) => { setInputPrice({ ...inputPrice, price: e.target.value as number }); }}
-          />
-        </Col>
-        <Col span={24}>
-          <span>ระดับราคาที่ต้องการแจ้งเตือน (+/-)</span>
-          <Input
-            defaultValue="0"
-            prefix={<FontAwesomeIcon icon={faBell} />}
-            addonAfter="บาท"
-            allowClear
-            type="number"
-            onChange={(e: any) => { setInputPrice({ ...inputPrice, threshold: e.target.value as number }); }}
           />
         </Col>
       </Row>
@@ -219,7 +200,7 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
           />
         </Col>
       </Row>
-      <Divider />
+      <Divider orientation="left">ข้อความ</Divider>
       <Row>
         <Input
           prefix={<FontAwesomeIcon icon={faCommentAlt} />}

@@ -4,6 +4,7 @@ import {
 } from 'antd';
 import { Link } from 'react-router-dom';
 import R from '../routers/investor/Router';
+import RLogin from '../routers/guest/Router';
 import './less/main-layout.less';
 
 const { Header, Content, Footer } = Layout;
@@ -17,7 +18,7 @@ const MainLayout: React.FC = (props): JSX.Element => {
         <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
           <Menu.Item key="1"><Link to={R.index.link}>Investor</Link></Menu.Item>
           <div style={{ float: 'right' }}>
-            <Button type="link">Login</Button>
+            <Button type="link"><Link to={RLogin.login.link}>Login</Link></Button>
           </div>
         </Menu>
       </Header>

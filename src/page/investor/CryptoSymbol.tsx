@@ -37,7 +37,9 @@ const CryptoSymbol: React.FC = (props): JSX.Element => {
       "details": true,
       "studies": [
         "MACD@tv-basicstudies",
-        "RSI@tv-basicstudies"
+        "RSI@tv-basicstudies",
+        "BB@tv-basicstudies",
+        "BollingerBandsWidth@tv-basicstudies"
       ],
       "container_id": "tradingview_5a28d"
     }
@@ -51,19 +53,6 @@ const CryptoSymbol: React.FC = (props): JSX.Element => {
         <Breadcrumb.Item>{Symbol}</Breadcrumb.Item>
       </Breadcrumb>
       <div className="investor-content">
-        <Row>
-          <Col span={9}>
-            <Card title="ราคาที่ต้องการจะ Ticker ไปยัง  Line">
-              <TickerForm symbol={Symbol} />
-            </Card>
-          </Col>
-          <Col span={14} offset={1}>
-            <Card title="กราฟ ณ​ เวลาปัจจุบัน">
-              <LineBTC symbol={Symbol} />
-            </Card>
-          </Col>
-        </Row>
-        <br/>
         <Row>
           <Col span={24}>
             <InnerHTML html={`
@@ -79,12 +68,24 @@ const CryptoSymbol: React.FC = (props): JSX.Element => {
             />
           </Col>
         </Row>
+        <Row gutter={[16, 24]}>
+          <Col sm={0} xs={0} md={24} lg={12}>
+            <Card title="กราฟ ณ​ เวลาปัจจุบัน">
+              <LineBTC symbol={Symbol} />
+            </Card>
+          </Col>
+          <Col sm={24} xs={24} md={24} lg={12}>
+            <Card title="ราคาที่ต้องการจะ Ticker ไปยัง  Line">
+              <TickerForm symbol={Symbol} />
+            </Card>
+          </Col>
+        </Row>
         <br />
         <br />
         <Row>
-          <Col span={24}>
+          <Col sm={24} xs={24} md={24} lg={24}>
             <Card title="รายการ Ticker">
-              <TickerTable />
+              <TickerTable symbol={Symbol} />
             </Card>
           </Col>
         </Row>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/interface-name-prefix */
 import React from 'react';
 import { Table, Tag, Space } from 'antd';
 
@@ -66,10 +67,17 @@ const data = [
   },
 ];
 
-const TickerTable = () => (
-  <div>
-    <Table columns={columns} dataSource={data} />
-  </div>
-);
+interface ITickerTableProps {
+  symbol: string;
+}
+
+const TickerTable: React.FC<ITickerTableProps> = ({ symbol }): JSX.Element => {
+  console.log(symbol);
+  return (
+    <div>
+      <Table columns={columns} dataSource={data} />
+    </div>
+  );
+};
 
 export default TickerTable;
