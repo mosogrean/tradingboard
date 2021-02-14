@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/tradingboard/static/css/main.5e3e0f55.chunk.css",
-    "main.js": "/tradingboard/static/js/main.80d3577f.chunk.js",
-    "main.js.map": "/tradingboard/static/js/main.80d3577f.chunk.js.map",
+    "main.js": "/tradingboard/static/js/main.258acdd9.chunk.js",
+    "main.js.map": "/tradingboard/static/js/main.258acdd9.chunk.js.map",
     "runtime-main.js": "/tradingboard/static/js/runtime-main.a22fb6f6.js",
     "runtime-main.js.map": "/tradingboard/static/js/runtime-main.a22fb6f6.js.map",
-    "static/js/2.ccd4c609.chunk.js": "/tradingboard/static/js/2.ccd4c609.chunk.js",
-    "static/js/2.ccd4c609.chunk.js.map": "/tradingboard/static/js/2.ccd4c609.chunk.js.map",
+    "static/js/2.edfd9947.chunk.js": "/tradingboard/static/js/2.edfd9947.chunk.js",
+    "static/js/2.edfd9947.chunk.js.map": "/tradingboard/static/js/2.edfd9947.chunk.js.map",
     "index.html": "/tradingboard/index.html",
-    "precache-manifest.b6defdd163ded135091bff0836a58a88.js": "/tradingboard/precache-manifest.b6defdd163ded135091bff0836a58a88.js",
+    "precache-manifest.9b7783624ec98038192e62ece11ac701.js": "/tradingboard/precache-manifest.9b7783624ec98038192e62ece11ac701.js",
     "service-worker.js": "/tradingboard/service-worker.js",
     "static/css/main.5e3e0f55.chunk.css.map": "/tradingboard/static/css/main.5e3e0f55.chunk.css.map",
-    "static/js/2.ccd4c609.chunk.js.LICENSE.txt": "/tradingboard/static/js/2.ccd4c609.chunk.js.LICENSE.txt"
+    "static/js/2.edfd9947.chunk.js.LICENSE.txt": "/tradingboard/static/js/2.edfd9947.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.a22fb6f6.js",
-    "static/js/2.ccd4c609.chunk.js",
+    "static/js/2.edfd9947.chunk.js",
     "static/css/main.5e3e0f55.chunk.css",
-    "static/js/main.80d3577f.chunk.js"
+    "static/js/main.258acdd9.chunk.js"
   ]
 }
