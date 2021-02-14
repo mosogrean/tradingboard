@@ -1,42 +1,62 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable @typescript-eslint/interface-name-prefix */
 import {
-  faMoneyBillAlt, faClock, faCommentAlt, faBellSlash, faBell,
+  faMoneyBillAlt, faClock, faCommentAlt,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   Divider, Row, Col, Radio, Input, DatePicker, Space, Badge, Card, Button, Modal, Descriptions,
 } from 'antd';
-import moment from 'moment';
 import React, { useState, useEffect } from 'react';
-import {
-  SymbolType, TradingAPI, TradingNowAPI, TradingTimeSelectAPI,
-} from '../../../api/bitkub';
+import { gql, useMutation } from '@apollo/client';
+import { Redirect } from 'react-router';
+import R from '../../../routers/guest/Router';
 
 interface TickerFormProps {
   symbol: string;
+  setResetTable: (is: boolean) => any;
 }
 
 // eslint-disable-next-line @typescript-eslint/interface-name-prefix
 interface IInputPrice {
-  price: number;
-  threshold: number;
+  price: any;
+  threshold: string;
 }
 
 interface IInputMain {
-  notification_times: number;
+  notification_times: any;
   detail: string;
 }
 
-const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
+const ADD_TICKER = gql`
+  mutation crypto_add_symbol_value_check(
+    $symbol: String!
+    $price: Float!
+    $times: Float!
+    $alert_msg: String!
+  ) {
+    crypto_add_symbol_value_check(
+      symbol: $symbol, 
+      price: $price, 
+      times: $times, 
+      alert_msg: $alert_msg
+    )
+}
+`;
+
+const TickerForm: React.FC<TickerFormProps> = ({ symbol, setResetTable }): JSX.Element => {
   const [type, setType] = useState('purchase_price');
   const [showPriceOrPoint, setshowPriceOrPoint] = useState('price');
   const [inputPrice, setInputPrice] = useState<IInputPrice>({} as IInputPrice);
-  const [inputMain, setInputMain] = useState<IInputMain>({} as IInputMain);
+  const [inputMain, setInputMain] = useState<IInputMain>({ notification_times: 3 } as IInputMain);
   const [point1, setPoint1] = useState({
     date: '', unix: 0, price: 0,
   });
   const [point2, setPoint2] = useState({
     date: '', unix: 0, price: 0,
   });
+
+  const [goTo, setGoTo] = useState<JSX.Element>();
 
   const [visibleModal, setVisibleModal] = useState(false);
 
@@ -45,27 +65,29 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
     setType(e.target.value);
   };
 
-  useEffect(() => {
-    const time = new Date(point1.date).getTime() / 1000;
-    // eslint-disable-next-line no-restricted-globals
-    if (!isNaN(time) && point1.unix === 0) {
-      const unixTime = moment.unix(time).unix();
-      TradingTimeSelectAPI(symbol as SymbolType, unixTime).then((result: any) => {
-        setPoint1({ ...point1, price: result.c[0] });
-      });
-    }
-  }, [point1.date]);
+  const [addTicker] = useMutation(ADD_TICKER);
 
-  useEffect(() => {
-    const time = new Date(point1.date).getTime() / 1000;
-    // eslint-disable-next-line no-restricted-globals
-    if (!isNaN(time) && point2.unix === 0) {
-      const unixTime = moment.unix(time).unix();
-      TradingTimeSelectAPI('BTC_THB', unixTime).then((result: any) => {
-        setPoint2({ ...point2, price: result.c[0] });
-      });
-    }
-  }, [point1.date]);
+  // useEffect(() => {
+  //   const time = new Date(point1.date).getTime() / 1000;
+  //   // eslint-disable-next-line no-restricted-globals
+  //   if (!isNaN(time) && point1.unix === 0) {
+  //     const unixTime = moment.unix(time).unix();
+  //     TradingTimeSelectAPI(symbol as SymbolType, unixTime).then((result: any) => {
+  //       setPoint1({ ...point1, price: result.c[0] });
+  //     });
+  //   }
+  // }, [point1.date]);
+
+  // useEffect(() => {
+  //   const time = new Date(point1.date).getTime() / 1000;
+  //   // eslint-disable-next-line no-restricted-globals
+  //   if (!isNaN(time) && point2.unix === 0) {
+  //     const unixTime = moment.unix(time).unix();
+  //     TradingTimeSelectAPI('BTC_THB', unixTime).then((result: any) => {
+  //       setPoint2({ ...point2, price: result.c[0] });
+  //     });
+  //   }
+  // }, [point1.date]);
 
   //   `{
   //   symbol: 'XLM',
@@ -75,7 +97,44 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
   //   now: moment().unix(),
   // }`
   const handleOk = () => {
-    // send api
+    if (!window.localStorage.getItem('authorization')) {
+      setGoTo(<Redirect to={R.login.link} />);
+    } else {
+      switch (type) {
+        case 'purchase_price':
+          addTicker({
+            variables: {
+              symbol: symbol.toLowerCase(),
+              price: parseFloat(inputPrice.price),
+              times: parseFloat(inputMain.notification_times),
+              alert_msg: inputMain.detail,
+            },
+            context: {
+              headers: {
+                Authorization: window.localStorage.getItem('authorization'),
+              },
+            },
+          });
+
+          break;
+        case 'selling_price':
+          addTicker({
+            variables: {
+              symbol: symbol.toLowerCase(),
+              price: inputPrice.price,
+              times: inputMain.notification_times,
+              alert_msg: inputMain.detail,
+            },
+          });
+          break;
+        default:
+          break;
+      }
+      setTimeout(() => {
+        setVisibleModal(false);
+        setResetTable(true);
+      }, 1000);
+    }
   };
 
   const modalDetail = () => {
@@ -84,11 +143,36 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
         return (
           <>
             <Descriptions title="ราคาที่ต้องการซื้อ" bordered>
-              <Descriptions.Item label="ราคาบันทึก" span={3}>{inputPrice.price}</Descriptions.Item>
+              <Descriptions.Item label="ราคาบันทึก" span={3}>
+                {inputPrice.price}
+                {' '}
+                บาท
+              </Descriptions.Item>
               <Descriptions.Item label="แจ้งเตือนทั้งหมด" span={3}>
                 {inputMain.notification_times}
+                {' '}
+                ครั้ง
               </Descriptions.Item>
-              <Descriptions.Item label="รายละเอียดการแจ้งเตือน" span={3}>
+              <Descriptions.Item label="ข้อความการแจ้งเตือน" span={3}>
+                {inputMain.detail}
+              </Descriptions.Item>
+            </Descriptions>
+          </>
+        );
+      case 'selling_price':
+        return (
+          <>
+            <Descriptions title="ราคาที่ต้องการขาย" bordered>
+              <Descriptions.Item label="ราคาบันทึก" span={3}>
+                {inputPrice.price}
+                {' '}
+              </Descriptions.Item>
+              <Descriptions.Item label="แจ้งเตือนทั้งหมด" span={3}>
+                {inputMain.notification_times}
+                {' '}
+                ครั้ง
+              </Descriptions.Item>
+              <Descriptions.Item label="ข้อความการแจ้งเตือน" span={3}>
                 {inputMain.detail}
               </Descriptions.Item>
             </Descriptions>
@@ -100,6 +184,7 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
   };
   return (
     <div>
+      {goTo || null}
       <Modal
         title="ตรวจสอบรายการ"
         visible={visibleModal}
@@ -191,6 +276,7 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol }): JSX.Element => {
       <Row>
         <Col span={24}>
           <Input
+            value={3}
             defaultValue={3}
             prefix={<FontAwesomeIcon icon={faClock} />}
             addonAfter="ครั้ง"

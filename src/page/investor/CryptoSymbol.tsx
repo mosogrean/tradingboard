@@ -15,15 +15,16 @@ import TickerTable from './component/TickerTable';
 
 const CryptoSymbol: React.FC = (props): JSX.Element => {
   const { Symbol } = useParams();
-  const [resetTable, setResetTable] = useState(false);
+  const [resetTable, setResetTable] = useState(true);
   const [viewBitcoin, setViewBitcoin] = useState('');
+  console.log(resetTable)
 
   setTimeout(() => {
     setViewBitcoin(`new TradingView.widget(
       {
       "width": "100%",
       "height": "660",
-      "symbol": "BITKUB:${Symbol.split('_').join('')}",
+      "symbol": "BITKUB:${Symbol.toUpperCase()}THB",
       "interval": "5", //240
       "timezone": "Asia/Bangkok",
       "theme": "light",
@@ -71,12 +72,12 @@ const CryptoSymbol: React.FC = (props): JSX.Element => {
         <Row gutter={[16, 24]}>
           <Col sm={0} xs={0} md={24} lg={12}>
             <Card title="กราฟ ณ​ เวลาปัจจุบัน">
-              <LineBTC symbol={Symbol} />
+              <LineBTC symbol={`${Symbol}_THB`} />
             </Card>
           </Col>
           <Col sm={24} xs={24} md={24} lg={12}>
             <Card title="ราคาที่ต้องการจะ Ticker ไปยัง  Line">
-              <TickerForm symbol={Symbol} />
+              <TickerForm symbol={Symbol} setResetTable={setResetTable} />
             </Card>
           </Col>
         </Row>
@@ -85,7 +86,7 @@ const CryptoSymbol: React.FC = (props): JSX.Element => {
         <Row>
           <Col sm={24} xs={24} md={24} lg={24}>
             <Card title="รายการ Ticker">
-              <TickerTable symbol={Symbol} />
+              <TickerTable symbol={Symbol} resetTable={resetTable} setResetTable={setResetTable} />
             </Card>
           </Col>
         </Row>

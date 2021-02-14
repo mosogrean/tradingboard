@@ -16,42 +16,67 @@ import { Redirect } from 'react-router';
 import R from '../../routers/investor/Router';
 import './less/index.less';
 import Formular from './component/Formular';
+import { useQuery, gql } from '@apollo/client';
 
 const columns = [
   {
     title: 'สกุลเงิน',
     dataIndex: 'title',
     key: 'title',
+    render: (elem: string): JSX.Element => (<strong>{elem.toUpperCase()}</strong>),
+  },
+  {
+    title: '',
+    dataIndex: 'symbol',
+    key: 'symbol',
+    render: (elem: string): JSX.Element => (<strong>{elem.toUpperCase()}</strong>),
   },
 ];
 
-export const CryptoSymbolData = [
-  {
-    key: '1',
-    title: 'BITCOIN',
-    crypto: 'BTC_THB',
-  }, {
-    key: '2',
-    title: 'ETHREUM',
-    crypto: 'ETH_THB',
-  },
-  {
-    key: '3',
-    title: 'XRP',
-    crypto: 'XRP_THB',
-  },
-  {
-    key: '4',
-    title: 'OMG',
-    crypto: 'OMG_THB',
-  },
-];
+// export const CryptoSymbolData = [
+//   {
+//     key: '1',
+//     title: 'BITCOIN',
+//     crypto: 'BTC_THB',
+//   }, {
+//     key: '2',
+//     title: 'ETHREUM',
+//     crypto: 'ETH_THB',
+//   },
+//   {
+//     key: '3',
+//     title: 'XRP',
+//     crypto: 'XRP_THB',
+//   },
+//   {
+//     key: '4',
+//     title: 'OMG',
+//     crypto: 'OMG_THB',
+//   },
+// ];
+
+const GET_SYMBOL_CRYPTO = gql`
+  query {
+    symbol_crypto {
+      title
+      symbol
+      status
+    }
+  }
+`;
 
 const Index: React.FC = (): JSX.Element => {
   const [resetTable, setResetTable] = useState(false);
   const [formValue, setFormValue] = useState<any>(false);
   const [descDeposit, setDescDeposit] = useState<any>();
   const [goToPath, setGoToPath] = useState<JSX.Element>();
+
+  const symbolCryptos = useQuery(GET_SYMBOL_CRYPTO);
+
+  const CryptoSymbolList = symbolCryptos.data?.symbol_crypto?.map((val: any, index: number) => ({
+    key: index,
+    ...val,
+  }));
 
   const [form] = Form.useForm();
 
@@ -97,10 +122,10 @@ const Index: React.FC = (): JSX.Element => {
             <Table
               className="table-check"
               columns={columns}
-              dataSource={CryptoSymbolData}
+              dataSource={CryptoSymbolList}
               onRow={(record, rowIndex) => ({
                 onClick: (): void => {
-                  setGoToPath(<Redirect to={R.cryptoSymbol.link.replace(':Symbol', record.crypto)} />);
+                  setGoToPath(<Redirect to={R.cryptoSymbol.link.replace(':Symbol', record.symbol.toUpperCase())} />);
                 }, // click row
               })}
             />

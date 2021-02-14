@@ -5,7 +5,7 @@ import {
 } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExternalLinkAlt, faExternalLinkSquareAlt, faTasks } from '@fortawesome/free-solid-svg-icons';
-import { CryptoSymbolData } from './Index';
+import { gql, useQuery } from '@apollo/client';
 import R from '../../routers/investor/Router';
 
 const { Title } = Typography;
@@ -15,17 +15,30 @@ interface INewCrypto {
   symbol: string;
   script: string;
 }
+const GET_SYMBOL_CRYPTO = gql`
+  query {
+    symbol_crypto {
+      title
+      symbol
+      status
+    }
+  }
+`;
 
 const CryptoTradingViewer: React.FC = (): JSX.Element => {
   const [tradingViews, setTradingViews] = useState<INewCrypto[]>();
   const [isTradingViewsMount, setIsTradingViewsMount] = useState(false);
   const [viewBitcoin, setViewBitcoin] = useState<string>();
   const [viewBitcoin2, setViewBitcoin2] = useState<string>();
+
+  const symbolCrypto = useQuery(GET_SYMBOL_CRYPTO);
   useEffect(() => {
-    const newCrypto = CryptoSymbolData.map(({ crypto }): INewCrypto => ({ oldSymbol: crypto, symbol: crypto.split('_').join(''), script: '' }));
-    setTradingViews(newCrypto);
-    setIsTradingViewsMount(true);
-  }, []);
+    if (!symbolCrypto.loading) {
+      const newCrypto = symbolCrypto.data?.symbol_crypto?.map(({ symbol }: any): INewCrypto => ({ oldSymbol: symbol, symbol: `${symbol.toUpperCase()}THB`, script: '' }));
+      setTradingViews(newCrypto);
+      setIsTradingViewsMount(true);
+    }
+  }, [symbolCrypto.loading]);
 
   useEffect(() => {
     setTimeout(() => {
