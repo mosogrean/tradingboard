@@ -1,15 +1,9 @@
 import {
-  Tag,
-  Space,
   Row,
   Card,
   Table,
   Button,
   Col,
-  Divider,
-  Form,
-  Input,
-  Descriptions,
 } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { Redirect } from 'react-router';
@@ -17,6 +11,8 @@ import R from '../../routers/investor/Router';
 import './less/index.less';
 import Formular from './component/Formular';
 import { useQuery, gql } from '@apollo/client';
+import Profit from './component/formularComponent/Profit';
+import Coins from './component/formularComponent/Coins';
 
 const columns = [
   {
@@ -66,11 +62,8 @@ const GET_SYMBOL_CRYPTO = gql`
 `;
 
 const Index: React.FC = (): JSX.Element => {
-  const [resetTable, setResetTable] = useState(false);
-  const [formValue, setFormValue] = useState<any>(false);
-  const [descDeposit, setDescDeposit] = useState<any>();
   const [goToPath, setGoToPath] = useState<JSX.Element>();
-
+  const [formular, setFormular] = useState<'profit' | 'coins'>('coins');
   const symbolCryptos = useQuery(GET_SYMBOL_CRYPTO);
 
   const CryptoSymbolList = symbolCryptos.data?.symbol_crypto?.map((val: any, index: number) => ({
@@ -78,20 +71,16 @@ const Index: React.FC = (): JSX.Element => {
     ...val,
   }));
 
-  const [form] = Form.useForm();
-
-  useEffect(() => {
-    const value: {cash: number; crypto_buy: number; crypto_sale: number; fee: number} = form.getFieldsValue();
-    const valFee = (100 - value.fee) / 100;
-    const amount = (value.cash * valFee) / value.crypto_buy;
-    const receive = (amount * value.crypto_sale) * valFee;
-    const profit = receive - value.cash;
-    setDescDeposit({
-      amount,
-      receive,
-      profit,
-    });
-  }, [formValue]);
+  const formularCheck = (): JSX.Element => {
+    switch (formular) {
+      case 'profit':
+        return (<Profit />);
+      case 'coins':
+        return (<Coins />);
+      default:
+        return (<></>);
+    }
+  };
 
   return (
     <>
@@ -133,52 +122,8 @@ const Index: React.FC = (): JSX.Element => {
         </Col>
         <Col xs={24} sm={24} md={24} lg={12}>
           <Card title="คำนวน">
-            <Formular />
-            <Divider>กำไร</Divider>
-            <Form
-              layout="vertical"
-              form={form}
-              initialValues={{ fee: 0.25 }}
-            >
-              <Form.Item
-                label="จำนวนเงินที่ต้องการซื้อ"
-                rules={[{ required: true }]}
-                name="cash"
-              >
-                <Input type="number" inputMode="decimal" step="any" onChange={() => { setFormValue(!formValue); }} />
-              </Form.Item>
-              <Form.Item
-                label="ราคาซื้อ crypto"
-                rules={[{ required: true }]}
-                name="crypto_buy"
-              >
-                <Input type="number" inputMode="decimal" step="any" onChange={() => { setFormValue(!formValue); }} />
-              </Form.Item>
-              <Form.Item
-                label="ราคาขาย crypto"
-                rules={[{ required: true }]}
-                name="crypto_sale"
-              >
-                <Input type="number" inputMode="decimal" step="any" onChange={() => { setFormValue(!formValue); }} />
-              </Form.Item>
-              <Form.Item
-                label="fee"
-                name="fee"
-              >
-                <Input type="number" inputMode="decimal" step="any" onChange={() => { setFormValue(!formValue); }} />
-              </Form.Item>
-            </Form>
-            {
-              descDeposit?.amount ? (
-                <Card style={{ marginTop: 10 }}>
-                  <Descriptions layout="vertical">
-                    <Descriptions.Item label="เหรียญที่ได้ทั้งหมด">{descDeposit?.amount || null}</Descriptions.Item>
-                    <Descriptions.Item label="ขายแล้วจะได้">{descDeposit?.receive || null}</Descriptions.Item>
-                    <Descriptions.Item label="เป็นกำไรสุทธิ">{descDeposit?.profit || null}</Descriptions.Item>
-                  </Descriptions>
-                </Card>
-              ) : null
-            }
+            <Formular setFormular={setFormular} />
+            {formularCheck()}
           </Card>
         </Col>
       </Row>

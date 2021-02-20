@@ -20,7 +20,10 @@ const LOGIN_USERNAME = gql`
 
 const CHECK_CODE = gql`
   query check_code_by_username($username: String!, $code:String!) {
-    check_code_by_username(username: $username, code: $code)
+    check_code_by_username(username: $username, code: $code) {
+      access_token
+      username
+    }
   }
 `;
 
@@ -46,7 +49,8 @@ const Index: React.FC = (): JSX.Element => {
     }
     if (checkCode.data) {
       message.success('login สำเร็จ');
-      window.localStorage.setItem('authorization', `Bearer ${checkCode.data?.check_code_by_username}`);
+      window.localStorage.setItem('authorization', `Bearer ${checkCode.data?.check_code_by_username.access_token}`);
+      window.localStorage.setItem('username', `${checkCode.data?.check_code_by_username.username}`);
       setTimeout(() => {
         setGoTo(<Redirect to={R.index.link} />);
       }, 1000);

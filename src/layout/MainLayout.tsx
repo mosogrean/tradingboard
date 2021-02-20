@@ -18,7 +18,11 @@ const MainLayout: React.FC = (props): JSX.Element => {
         <Menu theme="light" mode="horizontal" defaultSelectedKeys={['1']}>
           <Menu.Item key="1"><Link to={R.index.link}>Investor</Link></Menu.Item>
           <div style={{ float: 'right' }}>
-            <Button type="link"><Link to={RLogin.login.link}>Login</Link></Button>
+            {
+              window.localStorage.getItem('username')
+                ? <Button type="link">{window.localStorage.getItem('username')}</Button>
+                : <Button type="link"><Link to={RLogin.login.link}>Login</Link></Button>
+            }
           </div>
         </Menu>
       </Header>
@@ -28,7 +32,12 @@ const MainLayout: React.FC = (props): JSX.Element => {
           {children}
         </div>
       </Content>
-      <Footer style={{ textAlign: 'center' }}>MosoLab ©2021</Footer>
+      <Footer style={{ textAlign: 'center' }}>
+        MosoLab ©2021
+        Tradingboard
+        {' '}
+        {process.env.REACT_APP_VERSION}
+      </Footer>
     </Layout>
   );
 };

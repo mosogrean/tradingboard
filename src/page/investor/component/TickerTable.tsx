@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import {
   Table, Tag, Space, Button,
 } from 'antd';
-import { gql, useLazyQuery, useMutation } from '@apollo/client';
+import { gql, useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Redirect } from 'react-router';
 import R from '../../../routers/guest/Router';
 
@@ -27,19 +27,38 @@ const LIST_TICKERS = gql`
 `;
 
 const DELETE_TICKER = gql`
-  mutation delete_ticker_crypto($_id: String!){
-    delete_ticker_crypto(_id: $_id)
+  mutation delete_ticker_crypto($_id: String!) {
+    delete_ticker_crypto(_id: $_id) {
+      _id
+      symbol
+      price
+      alert_msg
+    }
   }
 `;
 
 const TickerTable: React.FC<ITickerTableProps> = ({ symbol, setResetTable, resetTable }): JSX.Element => {
   // console.log(symbol);
-  console.log(resetTable);
   const [data, setData] = useState([]);
-  const [listTickersFC, listTickers] = useLazyQuery(LIST_TICKERS);
-  const [deleteTicker] = useMutation(DELETE_TICKER);
+  const listTickers = useQuery(LIST_TICKERS, {
+    variables: {
+      symbol: symbol.toLowerCase(),
+    },
+    context: {
+      headers: {
+        Authorization: window.localStorage.getItem('authorization'),
+      },
+    },
+    onCompleted: () => {
+      setData(listTickers.data?.tickers_crypto_symbol || []);
+    },
+  });
+  const [deleteTickerFC, deleteTicker] = useMutation(DELETE_TICKER, {
+    update(catach, fetchData) {
+      setData(fetchData.data?.delete_ticker_crypto || []);
+    },
+  });
   const [goTo, setGoTo] = useState<JSX.Element>();
-  const [resetTableMatch, setResetTableMatch] = useState(resetTable);
 
   useEffect(() => {
     if (window.localStorage.getItem('authorization') === null) {
@@ -47,31 +66,13 @@ const TickerTable: React.FC<ITickerTableProps> = ({ symbol, setResetTable, reset
     }
   }, []);
 
+
   useEffect(() => {
-    console.log(resetTable);
     if (resetTable) {
-      console.log(resetTable);
-      listTickersFC({
-        variables: {
-          symbol: symbol.toLowerCase(),
-        },
-        context: {
-          headers: {
-            Authorization: window.localStorage.getItem('authorization'),
-          },
-        },
-      });
+      listTickers.refetch();
       setResetTable(false);
     }
   }, [resetTable]);
-
-  console.log(listTickers.data);
-
-  useEffect(() => {
-    if (listTickers.data !== undefined) {
-      setData(listTickers.data?.tickers_crypto_symbol || []);
-    }
-  }, [listTickers]);
 
   const columns = [
     {
@@ -84,7 +85,7 @@ const TickerTable: React.FC<ITickerTableProps> = ({ symbol, setResetTable, reset
       title: 'รายละเอียด',
       key: 'alert_msg',
       dataIndex: 'alert_msg',
-      render: (text: any): string => `${text} ครั้ง`,
+      render: (text: any): string => `${text}`,
     },
     {
       title: 'Action',
@@ -94,7 +95,7 @@ const TickerTable: React.FC<ITickerTableProps> = ({ symbol, setResetTable, reset
           <Button
             danger
             onClick={(): void => {
-              deleteTicker({
+              deleteTickerFC({
                 variables: {
                   _id: text._id,
                 },
@@ -103,10 +104,9 @@ const TickerTable: React.FC<ITickerTableProps> = ({ symbol, setResetTable, reset
                     Authorization: window.localStorage.getItem('authorization'),
                   },
                 },
-              });
-              setTimeout(() => {
+              }).then(() => {
                 setResetTable(true);
-              }, 1000);
+              });
             }}
           >
             Delete
@@ -118,7 +118,7 @@ const TickerTable: React.FC<ITickerTableProps> = ({ symbol, setResetTable, reset
   return (
     <div>
       {goTo || null}
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={listTickers.data?.tickers_crypto_symbol} />
     </div>
   );
 };

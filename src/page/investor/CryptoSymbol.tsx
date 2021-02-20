@@ -17,6 +17,7 @@ const CryptoSymbol: React.FC = (props): JSX.Element => {
   const { Symbol } = useParams();
   const [resetTable, setResetTable] = useState(true);
   const [viewBitcoin, setViewBitcoin] = useState('');
+
   console.log(resetTable)
 
   setTimeout(() => {
@@ -25,7 +26,7 @@ const CryptoSymbol: React.FC = (props): JSX.Element => {
       "width": "100%",
       "height": "660",
       "symbol": "BITKUB:${Symbol.toUpperCase()}THB",
-      "interval": "5", //240
+      "interval": "15", //240
       "timezone": "Asia/Bangkok",
       "theme": "light",
       "style": "1",

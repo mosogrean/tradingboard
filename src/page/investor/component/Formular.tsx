@@ -1,11 +1,15 @@
+/* eslint-disable @typescript-eslint/interface-name-prefix */
 import React from 'react';
 import Lists from './formularComponent/Lists';
 
-const Formular = () => {
-  console.log(1);
+interface IFormular {
+  setFormular: any;
+}
+
+const Formular: React.FC<IFormular> = ({ setFormular }) => {
   return (
     <div>
-      <Lists />
+      <Lists setFormular={setFormular} />
     </div>
   );
 };

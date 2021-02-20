@@ -31,8 +31,8 @@ const LineBTC: React.FC<LineBTCProps> = ({ symbol }): JSX.Element => {
   const [stateLabels, setStateLabels] = useState([]);
   const [stateData, setStateData] = useState([]);
 
-  const [resolution, setResolution] = useState<ResolutionType>('5');
-  const [periodOfTime, setPeriodOfTime] = useState(10);
+  const [resolution, setResolution] = useState<ResolutionType>('1');
+  const [periodOfTime, setPeriodOfTime] = useState(1);
 
   const setData = (): void => {
     const unixTime = moment().unix();
@@ -67,7 +67,7 @@ const LineBTC: React.FC<LineBTCProps> = ({ symbol }): JSX.Element => {
         <Col sm={24} xs={24} md={12} lg={12}>
           <Text>ระยะต่อ 1 ช่อง:</Text>
           <Select
-            defaultValue="5"
+            defaultValue="1"
             style={{ width: 120 }}
             onChange={(value: any) => {
               setResolution(value);
@@ -90,7 +90,7 @@ const LineBTC: React.FC<LineBTCProps> = ({ symbol }): JSX.Element => {
         </Col>
         <Col sm={24} xs={24} md={12} lg={12}>
           <Text>ช่วงเวลาทั้งหมด: </Text>
-          <InputNumber min={1} max={300} defaultValue={10} onChange={(value: any) => { setPeriodOfTime(value); }} />
+          <InputNumber min={1} max={300} defaultValue={1} onChange={(value: any) => { setPeriodOfTime(value); }} />
           <Text> ชั่วโมง</Text>
         </Col>
         <Col>

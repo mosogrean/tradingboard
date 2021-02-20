@@ -1,17 +1,28 @@
-import { faBalanceScaleRight } from '@fortawesome/free-solid-svg-icons';
+import { faBalanceScaleRight, faCoins } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { List } from 'antd';
+import { Button, List } from 'antd';
 import Avatar from 'antd/lib/avatar/avatar';
 import React from 'react';
+import { Link } from 'react-router-dom';
+
+interface ILists {
+  setFormular: any;
+}
 
 const data = [
   {
-    title: 'คำนวนหากำไร PROFIT',
-    icon: <FontAwesomeIcon icon={faBalanceScaleRight} size={'2x'} />,
-  }
+    title: 'คำนวณหากำไร PROFIT',
+    icon: <FontAwesomeIcon icon={faBalanceScaleRight} size="2x" />,
+    to: 'profit',
+  },
+  {
+    title: 'คำนวณหาราคาซื้อจากจำนวนเหรียญ',
+    icon: <FontAwesomeIcon icon={faCoins} size="2x" />,
+    to: 'coins',
+  },
 ];
 
-const Lists = () => {
+const Lists: React.FC<ILists> = ({ setFormular }) => {
   console.log(1);
   return (
     <>
@@ -22,7 +33,7 @@ const Lists = () => {
           <List.Item>
             <List.Item.Meta
               avatar={item.icon}
-              title={<a>{item.title}</a>}
+              title={<Button type="link" onClick={() => { setFormular(item.to); }}>{item.title}</Button>}
             />
           </List.Item>
         )}

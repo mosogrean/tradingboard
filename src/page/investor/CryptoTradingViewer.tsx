@@ -50,7 +50,7 @@ const CryptoTradingViewer: React.FC = (): JSX.Element => {
           "width": "100%",
           "height": 610,
           "symbol": "BITKUB:${crypto.symbol}",
-          "interval": "5", //240
+          "interval": "15", //240
           "timezone": "Asia/Bangkok",
           "theme": "light",
           "style": "1",
@@ -75,7 +75,6 @@ const CryptoTradingViewer: React.FC = (): JSX.Element => {
     }, 1000);
   }, [isTradingViewsMount]);
 
-  console.log(tradingViews);
 
   return (
     <div>
