@@ -63,7 +63,7 @@ const GET_SYMBOL_CRYPTO = gql`
 
 const Index: React.FC = (): JSX.Element => {
   const [goToPath, setGoToPath] = useState<JSX.Element>();
-  const [formular, setFormular] = useState<'profit' | 'coins'>('coins');
+  const [formular, setFormular] = useState<'profit' | 'coins'>('profit');
   const symbolCryptos = useQuery(GET_SYMBOL_CRYPTO);
 
   const CryptoSymbolList = symbolCryptos.data?.symbol_crypto?.map((val: any, index: number) => ({

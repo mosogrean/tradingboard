@@ -20,7 +20,18 @@ const MainLayout: React.FC = (props): JSX.Element => {
           <div style={{ float: 'right' }}>
             {
               window.localStorage.getItem('username')
-                ? <Button type="link">{window.localStorage.getItem('username')}</Button>
+                ? (
+                  <Button
+                    type="link"
+                    onClick={() => {
+                      window.localStorage.removeItem('username');
+                      window.localStorage.removeItem('authorization');
+                      window.location.reload();
+                    }}
+                  >
+                    {window.localStorage.getItem('username')}
+                  </Button>
+                )
                 : <Button type="link"><Link to={RLogin.login.link}>Login</Link></Button>
             }
           </div>
