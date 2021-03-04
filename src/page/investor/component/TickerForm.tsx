@@ -5,10 +5,10 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  Divider, Row, Col, Radio, Input, DatePicker, Space, Badge, Card, Button, Modal, Descriptions,
+  Divider, Row, Col, Radio, Input, DatePicker, Space, Badge, Card, Button, Modal, Descriptions, Switch,
 } from 'antd';
 import React, { useState, useEffect } from 'react';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { Redirect } from 'react-router';
 import R from '../../../routers/guest/Router';
 
@@ -44,11 +44,49 @@ const ADD_TICKER = gql`
 }
 `;
 
+const GET_MACD = gql`
+query Query($macdCryptoSymbol: String!) {
+  macd_crypto(symbol: $macdCryptoSymbol) {
+    status
+  }
+}
+`;
+
+const UPDATE_MACD = gql`
+mutation Update_macd_cryptoMutation($updateMacdCryptoSymbol: String) {
+  update_macd_crypto(symbol: $updateMacdCryptoSymbol) {
+    symbol
+    status
+  }
+}`;
+
 const TickerForm: React.FC<TickerFormProps> = ({ symbol, setResetTable }): JSX.Element => {
   const [type, setType] = useState('purchase_price');
   const [showPriceOrPoint, setshowPriceOrPoint] = useState('price');
   const [inputPrice, setInputPrice] = useState<IInputPrice>({} as IInputPrice);
   const [inputMain, setInputMain] = useState<IInputMain>({ notification_times: 3 } as IInputMain);
+  const getMACD = useQuery(GET_MACD, {
+    variables: {
+      macdCryptoSymbol: symbol.toLowerCase(),
+    },
+    context: {
+      headers: {
+        Authorization: window.localStorage.getItem('authorization'),
+      },
+    },
+  });
+
+  const [setUpdateMACD, updateMACD] = useMutation(UPDATE_MACD, {
+    context: {
+      headers: {
+        Authorization: window.localStorage.getItem('authorization'),
+      },
+    },
+    onCompleted: () => {
+      getMACD.refetch();
+    },
+  });
+
   const [point1, setPoint1] = useState({
     date: '', unix: 0, price: 0,
   });
@@ -196,6 +234,23 @@ const TickerForm: React.FC<TickerFormProps> = ({ symbol, setResetTable }): JSX.E
       >
         {modalDetail()}
       </Modal>
+      <Divider orientation="left">แจ้งเตือนแบบพิเศษ</Divider>
+      <Descriptions>
+        <Descriptions.Item label="ตัดกันของ MACD" style={{ justifyContent: 'center', display: 'flex' }} span={3}>
+          <Switch
+            loading={updateMACD.loading}
+            checked={getMACD?.data?.macd_crypto?.status === 'active'}
+            onChange={(): void => {
+              setUpdateMACD({
+                variables: {
+                  updateMacdCryptoSymbol: symbol.toLowerCase(),
+                },
+              });
+            }}
+          />
+        </Descriptions.Item>
+      </Descriptions>
+
       <Divider orientation="left">กำหนดรูปแบบ</Divider>
       <Row>
         <Col sm={24} xs={24} md={24} lg={24}>
